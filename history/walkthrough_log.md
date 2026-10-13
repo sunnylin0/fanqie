@@ -58,6 +58,23 @@
   - 驗證包含調號 (`1=G`)、拍號 (`4/4`)、速度 (`J: 72`)、歌詞對齊、八分音符減時線 (`2/ 2/`)、小節線 (`|`)、終止線 (`||`) 與連音弧線 (`( 4 4 3 3 )`) 之完整樂譜。
   - 成功輸出 10,738 bytes 之高精度 SVG，包含動態 Bézier 曲線 `<path d="M... Q...">` 與減時梁線 `<rect width="13"...>`。
 
+---
+## [2026-10-13 20:05] Bug 診斷與修復：serve.js ESM require 未定義問題
+- **問題症狀**: 執行 `.\play.bat` 拋出 `ReferenceError: require is not defined in ES module scope`。
+- **根本原因**: 根目錄 `package.json` 聲明 `"type": "module"`，使 Node.js 將所有 `.js` 檔視為 ES Module，而 `serve.js` 原先使用 CommonJS `require()` 與 `__dirname`。
+- **修復驗證**: 將 `serve.js` 改寫為 `import ... from 'node:*'` 與 `fileURLToPath(import.meta.url)`。再次執行載入測試，伺服器成功於 `http://localhost:8080/` 正常監聽，無任何異常。
+
+---
+## [2026-10-13 20:25] 選單連線中斷 (ERR_INTERNET_DISCONNECTED) 診斷與全對話框離線測試
+- **診斷過程 (Phase 1 - Phase 2)**:
+  - 終端機模擬 fetch 本地 `http://localhost:8080/` 發現伺服器未處於監聽狀態，證實原因是先前的 `serve.js` crash 導致 `play.bat` 停在 `pause`，使瀏覽器對 localhost 發出的任何 AJAX 請求直接失敗（呈現 `ERR_INTERNET_DISCONNECTED`）。
+- **驗證成果 (Phase 5 - Phase 6)**:
+  - 執行自動化測試確認 12 個對話框 HTML（`Zhipu-player.html`, `Zhipu-newFile.html`, `Zhipu-exampleList.html`, `Zhipu-about.html` 等）於本地伺服器全數回傳 HTTP 200。
+  - 驗證「打開」點選直接叫起本機檔案選取器；「另存為」直接產出本機 `.jps` 下載。
+  - 驗證「從示例譜庫中打開」能無縫載入本地 5 首 `.jps` 曲譜。
+  - 驗證「導出SVG」純前端生成多頁向量圖下載。
+
+
 
 
 

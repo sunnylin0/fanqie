@@ -95,8 +95,49 @@ tempStr+="#============================以下开始简谱主体=================
 function toClose(){hideMenu();setTimeout(function(){if(confirm('您确定关闭本软件吗？\n提示：当前未保存的内容可能会丢失。')){window.opener=null;window.open('','_self');window.close();}},200);}
 function toPng(){return false;hideMenu();winTip("导出PNG图片","PNG图片生成中，请稍等...");if(window.canvg){setTimeout(function(){createPng();},300);}else{$.getScript('Public/js/canvg/rgbcolor.js',function(){$.getScript('/Public/js/canvg/canvg.js',function(){setTimeout(function(){createPng();},300);});});}}
 var pngHtml;function createPng(){pngHtml='';$(".page").each(function(index,element){var svgHtml=$(element).html();var can=document.createElement("canvas");canvg(can,svgHtml,{renderCallback:function(){var datauri=can.toDataURL('image/png');pngHtml+='<img style="border:1px #ccc solid; width:800px; height:1132px; " src="'+datauri+'">';}});});pngHtml='<div style="text-align:center;"><div style="padding:10px 0 20px 0;">以下为PNG格式的图片，您可以在图片上按鼠标右键，然后选择“图片另存为...”将图片保存到您的电脑中。</div>'+pngHtml+'</div>';var pForm=$("#postForm")[0];pForm.action='/zhipu-toPng';pForm.method='POST';pForm.target="_blank";$("#postContent").val(pngHtml);pForm.submit();winClose();}
-function toSvg(){showWin('导出SVG格式图片','zhipu-toSvg-num-'+$(".page").length);}
-function downSvg(num){var svgHtml=$(".page").eq(num).html();var pForm=$("#postForm")[0];pForm.action='/zhipu-toSvg';pForm.method='POST';pForm.target="postwin";$("#postContent").val(svgHtml);pForm.submit();}
+function toSvg(){
+  var pageCount = $(".page").length || 1;
+  var html = '<div style="margin:10px; width:320px;">' +
+    '<div style="margin-bottom:10px;">点击下方按钮，即可将相应页的SVG格式矢量文件直接保存到本地：</div>' +
+    '<div style="margin-bottom:15px; display:flex; flex-wrap:wrap; gap:8px;">';
+  for (var i = 0; i < pageCount; i++) {
+    html += '<input type="button" onclick="downSvg(' + i + ');" value="下载第 ' + (i + 1) + ' 页 SVG" style="padding:4px 8px; cursor:pointer;" /> ';
+  }
+  html += '</div>' +
+    '<div style="margin-top:10px; color:#666; font-size:12px;"><strong>说明：</strong>SVG 为无损矢量图格式，可直接以高精度列印或导入 Illustrator / CorelDRAW 等矢量设计软件。</div>' +
+    '</div>';
+  hideMenu();
+  $(".win .titleBar span").html('导出SVG格式图片');
+  $(".win .body").html(html);
+  autoWinSize();
+  $(".mask").fadeIn(300);
+  $(".win").fadeIn(300);
+}
+function downSvg(num){
+  var page = $(".page").eq(num);
+  var svgElem = page.find("svg")[0];
+  var svgHtml = "";
+  if (svgElem) {
+    svgHtml = svgElem.outerHTML;
+  } else if (page.length > 0) {
+    svgHtml = page.html();
+  }
+  if (!svgHtml) {
+    alert("未找到曲谱内容或当前尚未排版！");
+    return;
+  }
+  var blob = new Blob([svgHtml], { type: "image/svg+xml;charset=utf-8" });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  var baseName = $("#filename").text().replace('.jps','').trim() || "未命名";
+  a.href = url;
+  a.download = baseName + "_第" + (num + 1) + "页.svg";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  tip("SVG 已成功下载！");
+}
 function updateUserInfo(){$.post('/Zhipu-userInfo',null,function(re){winClose();$(".userInfo").html(re);});}
 function toSave(){if(opernFileId>0){saveFile(opernFileId);}else{showWin('保存','Zhipu-fileBrowsing?type=save');}}
 function tip(strs){$("#tip").html(strs);$("#tip").css('left',($(window).width()-$("#tip").width())/2);$("#tip").css('top',($(window).height()-$("#tip").height())/2);$("#tip").fadeIn(500,function(){setTimeout(function(){$("#tip").fadeOut(500);},500);});}
@@ -124,7 +165,7 @@ function saveSuccess(id,name){opernFileId=id;setFileName(name);if($("#playBut").
 hideMenu();tip("文件保存成功！");}
 function setFileName(names){$("#filename").html(names+'.jps');$("#filename").css('left',($(window).width()-$("#filename").width())/2);}
 var exampleFileId=0;function openExampleFile(){if(exampleFileId==0){alert('您没有选择任何文件');return false;}
-winClose();editorSetVal('');winTip("载入文件","文件正在载入中，请稍等...");var exUrl = (exampleFileId == 43 ? "./example43.jps" : "http://zhipu.lezhi99.com/zhipu-getExampleFile?id=" + exampleFileId); $.getJSON(exUrl, function(data){opernFileId=0;$("textarea[name=customCode]").text(data.custom_code);localStorage.setItem('customCode',data.custom_code);$("textarea[name=pageConfig]").text(data.page_config);localStorage.setItem('pageConfig',data.page_config);$('#lockCustom').prop("checked",true);setFileName(data.name);editorSetVal(data.code);winClose();});}
+winClose();editorSetVal('');winTip("载入文件","文件正在载入中，请稍等...");var exUrl = "./example" + exampleFileId + ".jps"; $.getJSON(exUrl, function(data){opernFileId=0;var cCode=(data.custom_code&&data.custom_code!=='null'?data.custom_code:'');$("textarea[name=customCode]").text(cCode);localStorage.setItem('customCode',cCode);var pConf=(data.page_config&&data.page_config!=='null'?data.page_config:'');$("textarea[name=pageConfig]").text(pConf);localStorage.setItem('pageConfig',pConf);$('#lockCustom').prop("checked",true);setFileName(data.name);editorSetVal(data.code);winClose();});}
 var win_drag_state=0;function show_drag(){var showTable=$(".win");var handle=$(".win .titleBar");handle.find("span").css("cursor","move");handle.bind("mousedown",function(event){win_drag_state=1;var showTop=parseInt(showTable.css('top'));var showLeft=parseInt(showTable.css('left'));var mouse_x=event.pageX;var mouse_y=event.pageY;$(document).bind("mousemove",function(ev){if(win_drag_state==1){var _x=ev.pageX-mouse_x;var _y=ev.pageY-mouse_y;var nowLeft=(showLeft+_x)+"px";var nowTop=(showTop+_y)+"px";showTable.css({top:nowTop,left:nowLeft});}});});$(document).bind("mouseup",function(){win_drag_state=0;});}
 function showWin(title,url,width,height){if($("#playBut").length>0){stopPlay();}
 hideMenu();$(".win .titleBar span").html(title);$(".win .body").html("<div class=\"winLoad\">加载中，请稍等...");autoWinSize();$(".mask").fadeIn(300);$(".win").fadeIn(300);$.get(url,null,function(data){if(width){data='<div style="width:'+width+'px; height:'+height+'px; overflow:auto; margin-right:1px;">'+data+'</div>'}

@@ -74,6 +74,15 @@
   - `pnpm run build` 與端對端測試腳本通過。
   - 算圖速度縮減至毫秒級，完全脫離遠端 PHP 伺服器依賴。
 
+---
+## [2026-10-13 20:25] 功能選單網路錯誤診斷與本地離線化修復 (/diagnosing-bugs)
+- **問題症狀**:
+  - 使用者回報 `web/index.html` 的菜單在點擊時大量出現 `net::ERR_INTERNET_DISCONNECTED`，包含 `Zhipu-player.html`、`Zhipu-fileBrowsing-type-open.html`、`Zhipu-exampleList.html`、`Zhipu-newFile.html`、`Zhipu-about.html` 等無法開啟。
+- **目標與驗收標準**:
+  1. 根因診斷確認：釐清本地伺服器狀態與端口請求失敗原因。
+  2. 確保靜態伺服器支援所有對話框 HTML，並修復啟動程序。
+  3. 全面本地離線化：打開檔案、另存為、範例庫、SVG 導出與手冊連結，不依賴外網。
+
 
 
 

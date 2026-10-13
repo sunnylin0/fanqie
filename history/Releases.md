@@ -53,6 +53,20 @@
 - **動態向量幾何**: 支援二階貝茲曲線連音線、動態多層減時梁線、高低音點、小節線與反覆記號。
 - **架構決策與術語**: 發佈 ADR 0004 (TypeScript 純前端簡譜排版引擎與向量幾何渲染) 並擴充 `CONTEXT.md`。
 
+---
+## [2026-10-13 20:05] Serve.js ESM Compatibility Fix
+### 變更摘要
+- **模組語法相容**: 因 `package.json` 開啟 `"type": "module"`，將 `serve.js` 完整重構為原生 ES Module (`import ... from 'node:*'`)，徹底修復 `ReferenceError: require is not defined in ES module scope`。
+
+---
+## [2026-10-13 20:25] Menu Offline Support & ERR_INTERNET_DISCONNECTED Fix
+### 變更摘要
+- **連線問題排查**: 確認先前伺服器因 ESM crash 導致 8080 端口無服務，使瀏覽器對 localhost 拋出 `net::ERR_INTERNET_DISCONNECTED`；已修復並驗證所有對話框 HTML 均回傳 200。
+- **純離線選單行為**:
+  - `web/index.html`: 「打開」直接觸發 `#localFileInput` 讀取本地 `.jps`；「另存為」直接呼叫本地儲存；軟體與語法幫助改用 `window.open` 在新分頁瀏覽。
+  - `web/Zhipu-jsCode.js`: 示範曲庫 `openExampleFile()` 全面接通本地 5 首曲譜；「導出SVG」實作純前端 DOM 抽取與 Blob 向量下載，完全移除遠端伺服器請求。
+
+
 
 
 

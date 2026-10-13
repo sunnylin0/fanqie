@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>导出PDF</title>
+</head>
+
+<body>
+	<div style="margin:10px; width:300px;">
+        <div style="margin-bottom:10px;">
+        <strong>说明：</strong>根据您的曲谱页数，生成PDF文档可能需要几十秒的时间，请在点击下方按钮后不要关闭新窗口，并耐心等待。
+        </div>
+        <form action="./Zhipu-toPdf.html" method="post" target="postwin" id="postToPdf" style=" text-align:center; ">
+            <input name="down" value="y" type="hidden">
+            <input name="code" type="hidden">
+            <input name="customCode" type="hidden">
+            <input name="pageConfig" type="hidden">
+            <input type="button" onClick=" postToPdf.submit(); this.value='PDF生成中，请稍等...'; this.disabled=true; " value="我知道了，导出PDF文档">
+        </form>
+        
+        </div>
+        
+        <script>
+        //导出PDF
+        
+            var jpcode =window.frames["editFrame"].document.getElementById("editor_text").value;
+            var customCode = $("textarea[name=customCode]").text();
+            var pageConfig = $("textarea[name=pageConfig]").text();
+            jpcode = jpcode.replace(/\n/g,"&hh&");
+            customCode = customCode.replace(/\n/g,"&hh&");
+            $("#postToPdf input[name=code]").val(jpcode);
+            $("#postToPdf input[name=customCode]").val(customCode);
+            $("#postToPdf input[name=pageConfig]").val(pageConfig);
+            //$("#postToPdf").submit();
+        
+        </script>
+     </body>
+</html>

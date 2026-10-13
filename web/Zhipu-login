@@ -1,0 +1,26 @@
+<form method="post" action="./Zhipu-login.html" target="postwin">
+<table width="300" border="1" style="margin-top:10px;">
+  <tr>
+    <td height="35" colspan="3" align="center">您好，欢迎登录 ^_^</td>
+    </tr>
+  <tr>
+    <td width="83" height="35" align="right">用户名：</td>
+    <td width="201"><input name="username" type="text" id="username" size="22"></td>
+  </tr>
+  <tr>
+    <td height="35" align="right">密　码：</td>
+    <td><input name="password" type="password" id="password" size="22"></td>
+  </tr>
+  <tr>
+    <td align="right">&nbsp;</td>
+    <td><label><input type="checkbox" name="autologin"  value="autologin" id="autologin">下次自动登录</label></td>
+  </tr>
+  <tr>
+    <td height="50" colspan="2" align="center"><input type="submit" name="submit" id="submit" value="登录">
+      &nbsp;
+      <input type="button" name="button3" id="button3" onClick="showWin('新用户注册','/Zhipu-reg');" value="新用户注册">      
+      &nbsp;&nbsp;
+  <input type="button" name="button2" id="button2" onClick="winClose();" value="取消"></td>
+  </tr>
+</table>
+</form>

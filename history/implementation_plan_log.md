@@ -56,5 +56,20 @@
   1. 支援 PDF 匯出（透過瀏覽器 `window.print()` 或 `jspdf` 將本地 SVG 直接輸出為高品質向量 PDF）。
   2. 支援 SoundFont 更多樂器音色擴充（如笛子、古箏、提琴等）。
 
+---
+## [2026-10-13 20:25] 選單離線修復與本地資源加載改進 (Completed)
+- **問題分析與修復步驟**:
+  1. **伺服器排查**: 舊版 `serve.js` 因 `require` ESM 崩潰，修復為 `import http from 'node:http'` 並確認靜態響應 200。
+  2. **檔案對話框離線化**:
+     - `menuOpenFile`: 直接觸發 `#localFileInput`，離線載入本機 `.jps`。
+     - `menuSaveAs`: 直接觸發純前端 Blob 下載本機 `.jps`。
+     - `openExampleFile()`: 將示範曲目錄全面對接本地 5 首曲庫（`example43.jps`, `example37.jps`, `example110760.jps`, `example63.jps`, `example61.jps`）。
+     - `toSvg()` / `downSvg()`: 純前端抽取 SVG 向量並生成 Blob 下載。
+     - 幫助選單: 以 `window.open` 開啟 `./Zhipu-nw-ac-fanqie.html` 與 `./zhipu-doc.html`。
+- **影響檔案**:
+  - `web/index.html`
+  - `web/Zhipu-jsCode.js`
+  - `serve.js`
+
 
 

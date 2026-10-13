@@ -1,0 +1,4 @@
+<div style="padding:20px; text-align:center;">
+    <div style="padding-bottom:10px;">提示：您需要登录后才能进行此操作。</div>
+    <input type="button" onClick="showWin('用户登录','/Zhipu-login');" value="立刻登录">&nbsp;&nbsp;&nbsp;<input onClick="winClose();" type="button" value="取消">
+    </div>

@@ -117,9 +117,9 @@
         	<span id="menuFile" onClick="showMenu(this)">文件(F)</span>
         	<ul>
             	<li id="menuNewFile" onClick="showWin('新建','./Zhipu-newFile.html');"><i>Ctrl+N</i>新建...</li>
-            	<li id="menuOpenFile" onClick="showWin('打开','./Zhipu-fileBrowsing-type-open.html');"><i>Ctrl+O</i>打开...</li>
+            	<li id="menuOpenFile" onClick="document.getElementById('localFileInput').click();hideMenu();"><i>Ctrl+O</i>打开...</li>
             	<li id="menuSave" onClick="toSave();"><i>Ctrl+S</i>保存</li>
-            	<li id="menuSaveAs" onClick="showWin('另存为','./Zhipu-fileBrowsing-type-save.html');"><i>Shift+Ctrl+S</i>另存为...</li>
+            	<li id="menuSaveAs" onClick="toSave();hideMenu();"><i>Shift+Ctrl+S</i>另存为...</li>
             	<li class="line"></li>
             	<li onClick="showWin('系统示例文档','./Zhipu-exampleList.html');">从示例谱库中打开...</li>                
             	<li class="line"></li>                
@@ -169,8 +169,8 @@
     	<li>
         	<span id="menuHelp" onClick="showMenu(this)">帮助(H)</span>
         	<ul>
-            	<li onClick="parent.openUrl('番茄软件帮助','./Zhipu-nw-ac-fanqie.html');hideMenu();">软件帮助</li>
-					<li onClick="parent.openUrl('番茄脚本说明','./Zhipu-nw-ac-zhipu.html');hideMenu();">脚本说明手册</li>
+            	<li onClick="window.open('./Zhipu-nw-ac-fanqie.html', '_blank');hideMenu();">软件帮助</li>
+					<li onClick="window.open('./zhipu-doc.html', '_blank');hideMenu();">脚本说明手册</li>
                 
             	
             	<li id="menuSymbol" onClick="showWin('常用符号表，此界面可用“Ctrl+~”快捷键呼出，ESC键可关闭此界面。','./Zhipu-helpSymbol.html');"><i>Ctrl+~</i>常用符号表</li>
