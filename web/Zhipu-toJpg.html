@@ -1,40 +1,41 @@
-    <!doctype html>
-    <html>
-    <head>
-    <meta charset="utf-8">
-    <title>导出JPG格式</title>
-    </head>
-    
-    <body>
-        <div style="margin:10px; width:300px;">
-        <div style="margin-bottom:10px;">
-            <p><strong>说明：</strong>根据您的曲谱页数，生成JPG图片可能需要几十秒的时间，请在点击下方按钮后不要关闭新窗口，并耐心等待。</p>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>导出JPG格式</title>
+</head>
+
+<body>
+    <div style="margin:10px; width:330px;">
+        <div style="margin-bottom:12px; font-size:13px; line-height:1.6; color:#333;">
+            <p><strong>说明：</strong>纯前端本地转换，生成 JPG 图片无需上传服务器，保护乐谱隐私。</p>
         </div>
-        <form action="./Zhipu-toJpg.html" method="post" target="postwin" id="postToPdf" style="text-align:center; margin-bottom:15px;">
-            <div style="margin-bottom:10px;">
-            图片分辨率：<select name="dpi">
-              <option value="">默认（适合发布到网络分享）</option>
-              <option value="300">DPI 300（适合印刷出版）</option>
+        <div style="text-align:center; margin-bottom:15px;">
+            <div style="margin-bottom:12px; text-align:left;">
+            图片清晰度：
+            <select id="jpg_dpi_select" style="padding:4px; font-size:13px;">
+              <option value="1.5">标准清晰度（适合手机分享与网络发布）</option>
+              <option value="3">DPI 300 超清（适合印刷出版）</option>
             </select>
             </div>
-            <input name="down" value="y" type="hidden">
-            <input name="code" type="hidden">
-            <input name="customCode" type="hidden">
-            <input name="pageConfig" type="hidden">
-            <input type="button" onClick=" postToPdf.submit(); this.value='JPG导出中，请稍等...'; this.disabled=true; " value="我知道了，导出JPG图片">
-        </form>
+            <input type="button" id="btnExportJpg" onClick="doExportJpg();" value="我知道了，导出JPG图片" style="padding:6px 16px; font-size:14px; font-weight:bold; cursor:pointer;">
         </div>
-        
-        <script>
-            //导出JPG
-            var jpcode =window.frames["editFrame"].document.getElementById("editor_text").value;
-            var customCode = $("textarea[name=customCode]").text();
-            var pageConfig = $("textarea[name=pageConfig]").text();
-            jpcode = jpcode.replace(/\n/g,"&hh&");
-            customCode = customCode.replace(/\n/g,"&hh&");
-            $("#postToPdf input[name=code]").val(jpcode);
-            $("#postToPdf input[name=customCode]").val(customCode);
-            $("#postToPdf input[name=pageConfig]").val(pageConfig);
-        </script>
-    </body>
-    </html>
+    </div>
+    
+    <script>
+        function doExportJpg() {
+            var scale = $("#jpg_dpi_select").val();
+            var btn = document.getElementById("btnExportJpg");
+            if (btn) {
+                btn.disabled = true;
+                btn.value = "JPG导出中，请稍等...";
+            }
+            if (typeof clientExportJpg === 'function') {
+                clientExportJpg(scale);
+            } else {
+                alert("未找到导出组件");
+            }
+        }
+    </script>
+</body>
+</html>

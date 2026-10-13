@@ -92,6 +92,17 @@
   2. 於 `serve.js` 補充 `.txt` MIME 類型支援。
   3. 驗證本機伺服器在離線狀態下全數正確回應 200 OK。
 
+---
+## [2026-10-13 20:50] 導出 PDF 與 JPG 腳本 TypeError 診斷與純前端導出升級 (/diagnosing-bugs)
+- **問題症狀**:
+  - 點擊「导出PDF文档」跳出 `Zhipu-toPdf.html:26 Uncaught TypeError: Cannot read properties of undefined (reading 'document')`。
+  - 點擊「导出JPG图片」跳出 `Zhipu-toJpg.html:30 Uncaught TypeError: Cannot read properties of undefined (reading 'document')`。
+- **目標與驗收標準**:
+  1. 根因診斷確認：消除 `window.frames["editFrame"]` 不穩定引發的未定義屬性報錯，統一採用安全跨層存取 `getEditorValue()`。
+  2. 純前端導出轉換：廢除原版對 PHP 遠端轉檔依賴，改為本地純前端渲染。
+     - **JPG**: 採用 HTML5 `<canvas>` + `Blob` 支援標準與 300 DPI 印刷級無損分頁匯出。
+     - **PDF**: 採用 `@media print` 樣式注入，支援瀏覽器原生高品質向量 PDF 儲存。
+
 
 
 

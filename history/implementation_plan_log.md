@@ -79,5 +79,13 @@
   3. 於 `serve.js` 之 `MIME` 映射表補上 `.txt: 'text/plain; charset=utf-8'`。
   4. 執行端對端請求驗證，確認所有符號圖片與向量定義檔均能以 HTTP 200 本機載入。
 
+---
+## [2026-10-13 20:50] 純前端 PDF / JPG 導出落地 (Completed)
+- **實作步驟**:
+  1. 於 `web/Zhipu-jsCode.js` 封裝 `getEditorValue()` 安全讀取器，並更新 `toSave()` 與對話框讀取邏輯。
+  2. 實作純前端 `clientExportJpg(scale)`：遍歷 `.page svg` 透過 `XMLSerializer` 與 `canvas` 繪製，轉出 `.jpg` 二進位 Blob 自動下載，支援 1.5x 與 3.0x (300 DPI)。
+  3. 實作純前端 `clientExportPdf()`：於 `web/index.html` 注入專屬 `@media print` 向量分頁樣式，一鍵呼叫 `window.print()`。
+  4. 重寫 `Zhipu-toPdf.html` 與 `Zhipu-toJpg.html`，徹底移除拋錯的行內 script 與遠端伺服器表單 POST。
+
 
 

@@ -80,6 +80,14 @@
   - 執行本地伺服器測試，對 `/Public/symbol/46.png`、`/Public/symbol/47.png`、`/Public/symbol/1.png`、`/Public/symbol/1.txt`、`/Public/symbol/46.txt` 進行發包測試，全數回傳 HTTP 200。
   - 驗證在「符號大全」對話框中點選任何符號均能立即載入對應 SVG 片段並可插入樂譜。
 
+---
+## [2026-10-13 20:50] 導出 PDF / JPG 報錯修復與離線測試
+- **驗證記錄**:
+  - 靜態掃描確認 `Zhipu-toPdf.html` 與 `Zhipu-toJpg.html` 已無任何未受保護的 `window.frames` 存取。
+  - HTTP 驗證確認伺服器正確回應 200。
+  - 點擊「导出PDF文档」可一鍵拉起系統「另存為 PDF」純向量列印對話框。
+  - 點擊「导出JPG图片」能依指定解析度（標準/300 DPI）透過 Canvas 批次導出無損 `.jpg` 圖檔。
+
 
 
 

@@ -6,33 +6,24 @@
 </head>
 
 <body>
-	<div style="margin:10px; width:300px;">
-        <div style="margin-bottom:10px;">
-        <strong>说明：</strong>根据您的曲谱页数，生成PDF文档可能需要几十秒的时间，请在点击下方按钮后不要关闭新窗口，并耐心等待。
+	<div style="margin:10px; width:330px;">
+        <div style="margin-bottom:12px; font-size:13px; line-height:1.6; color:#333;">
+            <strong>高精度矢量 PDF 导出（纯前端本地）：</strong><br>
+            点击下方按钮后，将自动调用系统高保真矢量打印排版。<br>
+            <span style="color:#d35400; font-weight:bold;">★ 请在弹出的打印预览中将「目标打印机」选择为「另存为 PDF」即可。</span>
         </div>
-        <form action="./Zhipu-toPdf.html" method="post" target="postwin" id="postToPdf" style=" text-align:center; ">
-            <input name="down" value="y" type="hidden">
-            <input name="code" type="hidden">
-            <input name="customCode" type="hidden">
-            <input name="pageConfig" type="hidden">
-            <input type="button" onClick=" postToPdf.submit(); this.value='PDF生成中，请稍等...'; this.disabled=true; " value="我知道了，导出PDF文档">
-        </form>
-        
+        <div style="text-align:center; padding-top:10px;">
+            <input type="button" onClick="clientExportPdf();" value="立即导出 PDF 文档" style="padding:6px 16px; font-size:14px; font-weight:bold; cursor:pointer;">
         </div>
-        
-        <script>
-        //导出PDF
-        
-            var jpcode =window.frames["editFrame"].document.getElementById("editor_text").value;
-            var customCode = $("textarea[name=customCode]").text();
-            var pageConfig = $("textarea[name=pageConfig]").text();
-            jpcode = jpcode.replace(/\n/g,"&hh&");
-            customCode = customCode.replace(/\n/g,"&hh&");
-            $("#postToPdf input[name=code]").val(jpcode);
-            $("#postToPdf input[name=customCode]").val(customCode);
-            $("#postToPdf input[name=pageConfig]").val(pageConfig);
-            //$("#postToPdf").submit();
-        
-        </script>
-     </body>
+    </div>
+    
+    <script>
+        // 导出PDF
+        try {
+            var jpcode = (typeof getEditorValue === 'function') ? getEditorValue() : '';
+            var customCode = $("textarea[name=customCode]").text() || '';
+            var pageConfig = $("textarea[name=pageConfig]").text() || '';
+        } catch(e) {}
+    </script>
+</body>
 </html>

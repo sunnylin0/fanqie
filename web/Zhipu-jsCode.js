@@ -301,7 +301,7 @@ if(plays.hasOwnProperty(currentPlay)){playInterval=setTimeout(playIntervalFun,no
 // --- Local File Save & Open Support (Q7.A) ---
 function toSave() {
   hideMenu();
-  var jpcode = window.frames["editFrame"].document.getElementById("editor_text").value;
+  var jpcode = getEditorValue();
   var customCode = $("textarea[name=customCode]").text();
   var pageConfig = $("textarea[name=pageConfig]").text();
   var titleMatch = jpcode.match(/^B:\s*(.+)$/m);
@@ -360,3 +360,84 @@ $(document).ready(function() {
     if (input) input.click();
   });
 });
+
+function getEditorValue() {
+  try {
+    var iframe = document.getElementById("editFrame");
+    if (iframe) {
+      var doc = iframe.contentDocument || (iframe.contentWindow && iframe.contentWindow.document);
+      if (doc) {
+        var el = doc.getElementById("editor_text");
+        if (el) return el.value;
+      }
+    }
+  } catch(e) {}
+  try {
+    if (window.frames && window.frames["editFrame"]) {
+      var doc = window.frames["editFrame"].document || (window.frames["editFrame"].contentWindow && window.frames["editFrame"].contentWindow.document);
+      if (doc) {
+        var el = doc.getElementById("editor_text");
+        if (el) return el.value;
+      }
+    }
+  } catch(e) {}
+  return "";
+}
+
+function clientExportPdf() {
+  winClose();
+  setTimeout(function() {
+    window.print();
+  }, 350);
+}
+
+function clientExportJpg(scale) {
+  scale = parseFloat(scale) || 1.5;
+  var pages = $(".page");
+  if (pages.length === 0) {
+    alert("未找到曲谱内容，请先进行预览！");
+    return;
+  }
+  var baseName = $("#filename").text().replace('.jps','').trim() || "未命名";
+  var tasks = [];
+  for (var i = 0; i < pages.length; i++) {
+    (function(index) {
+      var page = pages.eq(index);
+      var svg = page.find("svg")[0];
+      if (!svg) return;
+      var svgData = new XMLSerializer().serializeToString(svg);
+      var svgBlob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+      var url = URL.createObjectURL(svgBlob);
+      var img = new Image();
+      tasks.push(new Promise(function(resolve) {
+        img.onload = function() {
+          var w = (svg.viewBox.baseVal && svg.viewBox.baseVal.width) || svg.clientWidth || 800;
+          var h = (svg.viewBox.baseVal && svg.viewBox.baseVal.height) || svg.clientHeight || 1132;
+          var canvas = document.createElement("canvas");
+          canvas.width = w * scale;
+          canvas.height = h * scale;
+          var ctx = canvas.getContext("2d");
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          URL.revokeObjectURL(url);
+          canvas.toBlob(function(blob) {
+            var a = document.createElement("a");
+            a.download = baseName + "_第" + (index + 1) + "页.jpg";
+            a.href = URL.createObjectURL(blob);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            resolve();
+          }, "image/jpeg", 0.95);
+        };
+        img.onerror = function() { resolve(); };
+        img.src = url;
+      }));
+    })(i);
+  }
+  Promise.all(tasks).then(function() {
+    winClose();
+    tip("JPG 图片已成功导出！");
+  });
+}

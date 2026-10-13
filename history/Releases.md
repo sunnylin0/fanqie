@@ -73,6 +73,13 @@
 - **伺服器 MIME 配置**: 在 `serve.js` 補充 `.txt` 為 `text/plain; charset=utf-8`。
 - **純離線可用**: 「符號大全」對話框圖片均可正常顯示，且點擊後可將符號正確插入曲譜中。
 
+---
+## [2026-10-13 20:50] Client-Side PDF & JPG Export Release
+### 變更摘要
+- **TypeError 徹底修復**: 移除非標準且不穩定的 `window.frames["editFrame"].document`，改用全域安全封裝 `getEditorValue()`，解決打開對話框時讀取屬性報錯中斷問題。
+- **純前端 JPG 導出**: 支援標準清晰度與 300 DPI 印刷出版級清晰度，利用 Canvas + SVG 二進位 Blob 自動分頁下載 `.jpg` 圖檔。
+- **純前端向量 PDF 導出**: 注入 `@media print` 向量分頁 CSS，一鍵叫起瀏覽器原生「另存為 PDF」，保證 100% 原始向量清晰度、不失真、不依賴 PHP 遠端伺服器。
+
 
 
 

@@ -18,6 +18,16 @@
 <script src="zhipu-local-renderer.js"></script>
 <script src="Zhipu-jsCode.js"></script>
 <script>var isWindows = true;</script>
+<style>
+@media print {
+    body { background: #fff !important; margin: 0 !important; padding: 0 !important; }
+    .head, .foot, .editor, .win, .mask, #tip, #filename, #addCustomTip, #customAttribute, .attributes, .customDiv { display: none !important; }
+    .preview { position: static !important; overflow: visible !important; width: 100% !important; height: auto !important; margin: 0 !important; padding: 0 !important; }
+    .svgList { width: 100% !important; margin: 0 !important; padding: 0 !important; }
+    .page { box-shadow: none !important; border: none !important; margin: 0 auto !important; page-break-after: always; break-after: page; }
+    .page:last-child { page-break-after: auto; break-after: auto; }
+}
+</style>
 </head>
 <body>
 <div id="debugDiv"></div>
