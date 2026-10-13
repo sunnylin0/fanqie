@@ -50,5 +50,14 @@
   - `web/Zhipu-jsCode.js` 之 `toSave()` 成功掛載本地 Blob JSON 下載機制。
   - `#localFileInput` 成功掛載 `FileReader` 檔案解析與 `editorSetVal` 回填。
 
+---
+## [2026-10-13 19:53] TypeScript 排版模組建置與端對端驗證
+- **建置驗證**:
+  - `pnpm run build`: esbuild 成功編譯 `src/renderer/index.ts` 輸出 `web/zhipu-local-renderer.js`（無錯誤，代碼乾淨）。
+- **端對端測試驗證 (`test_renderer.js`)**:
+  - 驗證包含調號 (`1=G`)、拍號 (`4/4`)、速度 (`J: 72`)、歌詞對齊、八分音符減時線 (`2/ 2/`)、小節線 (`|`)、終止線 (`||`) 與連音弧線 (`( 4 4 3 3 )`) 之完整樂譜。
+  - 成功輸出 10,738 bytes 之高精度 SVG，包含動態 Bézier 曲線 `<path d="M... Q...">` 與減時梁線 `<rect width="13"...>`。
+
+
 
 

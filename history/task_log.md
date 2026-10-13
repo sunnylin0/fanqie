@@ -51,6 +51,31 @@
   2. 建立 Windows 一鍵批次檔 `啟動.bat`，雙擊自動開啟瀏覽器並運行靜態服務。
   3. 驗證背景靜態服務 `http://localhost:8080/` 持續正常運作中。
 
+---
+## [2026-10-13 19:45] 深入逆向 Zhipu-draw 排版演算法與純 TS/JS 化
+- **目標**:
+  1. 全量下載並逆向官方 25 章語法規範手冊 (`docs/spec/GRAMMAR_SPEC.md`)。
+  2. 逆向 PHP 端的符號排版定位、減時線、附點、倚音、連音線與小節自適應寬度演算法。
+  3. 將算圖核心完整 TypeScript / JavaScript 化，達成像素級精確純本機排版。
+- **驗收標準**:
+  1. 完成官方 25 章語法解析器（Parser & Tokenizer）。
+  2. 支援複雜簡譜元素：連音弧線 (Bézier)、雙減時線、倚音括弧、調式升降號、反覆跳房子。
+  3. 產出 ADR 0004 並更新領域模型。
+
+---
+## [2026-10-13 19:53] TypeScript 排版引擎實作與編譯完成 (Q8.A, Q9.A, Q10.A)
+- **已達成目標**:
+  1. 建立 `src/renderer/`（包含 `types.ts`, `parser.ts`, `layout.ts`, `svg-defs.ts`, `svg-generator.ts`, `index.ts`）。
+  2. 實作小節彈性等比佈局演算法 (Measure-based Spring Layout) 與歌詞字元錨定對齊。
+  3. 實作動態向量幾何：二階貝茲曲線 (Quadratic Bézier) 連音弧線、多減時橫梁線、小節終止線與反覆記號。
+  4. 使用 esbuild 編譯產出純前端單檔 `web/zhipu-local-renderer.js`。
+  5. 發佈 ADR 0004 (TypeScript 純前端簡譜排版引擎與向量幾何渲染)。
+- **當前驗收狀態**:
+  - `pnpm run build` 與端對端測試腳本通過。
+  - 算圖速度縮減至毫秒級，完全脫離遠端 PHP 伺服器依賴。
+
+
+
 
 
 

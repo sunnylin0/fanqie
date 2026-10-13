@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>番茄脚本手册</title>
+    <meta charset="utf-8">
+    <style>
+		html,body{ overflow:hidden; }
+		.win{ border:1px solid #0c0c0c; background:#525252;  }
+		.main{ border:1px solid #6a6a6a; border-top-color:#999; padding:2px; }
+        .tbar{  height:30px;  background:#525252;}
+        .tbarTitle{ width:100px; height:30px; float:left; -webkit-user-select: none;-webkit-app-region: drag; }
+		.tbarTitle{ background:url(/Public/images/windows/title.png) 5px 5px no-repeat; }
+        .tbarBut{ float:left; width:105px; margin-top:-3px; }
+		.tbarBut span{ float:left; height:20px;  background:url(/Public/images/windows/but.png) no-repeat; }
+		.tbarBut span:hover{ background-position-y:-20px; }
+		.tbarBut .minimize{ width:29px; }
+		.tbarBut .maximize{ width:28px; background-position:-29px 0; }
+		.tbarBut .restore{ width:28px; background-position:-103px 0; }
+		.tbarBut .close{ width:47px; background-position:-57px 0; }
+		iframe{ border:1px #353535 solid; height:500px; margin-top:30px; }
+    </style>
+    <script src="/Public/js/jquery.min.js"></script>
+    <script>
+		var gui = require('nw.gui'); 
+        var win = gui.Window.get();
+        function setWin(a){
+            if(a=='close'){ win.close(); }
+            if(a=='minimize'){ win.minimize(); }
+            if(a=='maximize'){ 
+				if($(".maximize").hasClass('restore')){
+					win.restore(); $(".maximize").removeClass('restore');
+				}else{
+					win.maximize(); $(".maximize").addClass('restore');
+				}
+			 }
+        }
+
+		function openUrl(title,url){
+			var iconPng="icon/book.png";
+			if(title=="导出JPG格式图片"){
+				iconPng = "icon/fanqie.png";
+			}
+			var win = gui.Window.open(url, {
+				"title": title,
+				"icon": iconPng,
+				"toolbar": false, 
+				"width": 800, 
+				"height": 600,
+				"resizable":true,
+				"show_in_taskbar":true,
+				"frame":false,
+				"transparent":true,
+				"kiosk":false
+			});	
+		}
+		
+		function openExternal_(url){
+			gui.Shell.openExternal(url);
+		}
+		$(window).resize(function(){
+			autoWinSize();
+		});
+
+		win.on('resize', function() {
+			$(".maximize").removeClass('restore');
+			//$(".win,.main").css({'border-radius':'5px'});
+   		});
+		
+		
+		win.on('maximize', function() {
+			$(".maximize").addClass('restore');
+			//$(".win,.main").css({'border-radius':'0'});
+   		});
+		
+	
+    </script>
+  </head>
+  <body style="margin:0; padding:0;">
+    <!--<a onClick="location.reload();">刷新</a>-->
+    
+  	<div class="win"><div class="main">
+    	<div class="tbar" style=" position:absolute; z-index:1;">
+        	<div class="tbarTitle">&nbsp;</div>
+          <div class="tbarBut">
+                <span onClick="setWin('minimize');" class="minimize" title="最小化"></span>
+                <span onClick="setWin('maximize');" class="maximize" title="最大化"></span>
+                <span onClick="setWin('close');" class="close" title="关闭"></span>
+            </div>
+        </div>
+    	<iframe src="http://doc.lezhi99.com/zhipu" scrolling="no"></iframe></div>
+    </div>
+  </body>
+<script>
+function autoWinSize(){
+	var winHeight = $(window).height();
+	var winWidth = $(window).width();
+	
+	$(".main").height(winHeight-8);
+	
+	$("iframe").width( winWidth-10);
+	$("iframe").height( winHeight-40);
+	$(".tbarTitle").width(winWidth-120);
+}
+autoWinSize();
+</script>
+</html>

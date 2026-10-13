@@ -38,6 +38,23 @@
 - **專案配置**: 新增根目錄 `package.json`，支援 `pnpm start`。
 - **一鍵啟動**: 建立 Windows [啟動.bat](file:///c:/github/fanqie/%E5%95%9F%E5%8B%95.bat)，雙擊自動呼叫系統預設瀏覽器開啟 `http://localhost:8080/` 並常駐服務。
 
+---
+## [2026-10-13 19:45] Official Spec Extraction & TS Layout Engine Planning
+### 變更摘要
+- **官方語法規範全集**: 成功鏡像並萃取官方全部 25 章語法說明文檔至 [docs/spec/GRAMMAR_SPEC.md](file:///c:/github/fanqie/docs/spec/GRAMMAR_SPEC.md)。
+- **啟動修復**: 修復批次檔編碼與 `serve.js` 端口衝突處理機制。
+- **排版演算法規劃**: 啟動 `Zhipu-draw` PHP 算圖演算法純 TypeScript / JavaScript 化逆向決策樹。
+
+---
+## [2026-10-13 19:53] TypeScript Score Layout Engine Release
+### 變更摘要
+- **TypeScript 算圖架構**: 於 `src/renderer/` 完成 AST 型別定義、官方 25 章語法解析器 (`parser.ts`)、小節彈性等比排版 (`layout.ts`) 與 SVG 產生器 (`svg-generator.ts`)。
+- **建置管線配置**: 建立 `build.js` 並配置 `pnpm run build`，透過 esbuild 自動編譯輸出至 `web/zhipu-local-renderer.js`。
+- **動態向量幾何**: 支援二階貝茲曲線連音線、動態多層減時梁線、高低音點、小節線與反覆記號。
+- **架構決策與術語**: 發佈 ADR 0004 (TypeScript 純前端簡譜排版引擎與向量幾何渲染) 並擴充 `CONTEXT.md`。
+
+
+
 
 
 

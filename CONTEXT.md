@@ -23,6 +23,10 @@
 - **Zhipu Local Vector Renderer (智譜本地向量算圖器)**: 基於 `zhipu-local-renderer.js` 與內嵌 SVG 字符集（20 種核心音符與符號）的純前端獨立排版引擎。
 - **JPS Score File (.jps 簡譜檔案格式)**: 包含樂譜語法代碼、自訂向量元素與頁面排版配置的 JSON 結構化檔案格式。
 - **Dual-Track Rendering Engine (雙軌排版算圖架構)**: 本地毫秒級 SVG 生成優先、遠端 ThinkPHP 伺服器為備援的混合容錯渲染策略。
+- **Spring Grid Layout (彈性等比小節佈局)**: 依據小節內部音符時值總和動態分配 X 軸空間的水平排版自適應演算法。
+- **Quadratic Bézier Slur (二階貝茲連音弧線)**: 以動態控制點即時生成 SVG 弧線路徑以連接起始與終止音符的渲染技術。
+- **Underline Beam Geometry (減時線梁幾何)**: 根據音符時值（八分、十六分音符）在數字下方層疊繪製水平梁線的向量幾何規則。
+
 
 
 

@@ -1,10 +1,17 @@
 {
   "name": "fanqie-web",
   "version": "1.0.0",
-  "description": "番茄簡譜純靜態離線 Web 版",
+  "description": "番茄簡譜純靜態離線 Web 版 (TypeScript 算圖引擎)",
+  "type": "module",
   "main": "serve.js",
   "scripts": {
+    "build": "node build.js",
     "start": "node serve.js",
     "dev": "node serve.js"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
   }
 }
