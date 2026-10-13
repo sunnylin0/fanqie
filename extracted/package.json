@@ -1,0 +1,21 @@
+{
+	"name": "番茄简谱",
+	"main": "index.html",
+	"node-remote":"*.lezhi99.com",
+	"nodejs":true,
+	"window":{
+		"title": "番茄简谱",
+		"icon": "icon/fanqie.png",
+		"toolbar": false, 
+		"width": 503, 
+		"height": 271,
+		"resizable":true,
+		"show_in_taskbar":true,
+		"frame":false,
+		"transparent":true,
+		"kiosk":false
+	},
+	"webkit":{
+		"plugin": true
+	}
+}

@@ -1,0 +1,10 @@
+{
+  "name": "fanqie-web",
+  "version": "1.0.0",
+  "description": "番茄簡譜純靜態離線 Web 版",
+  "main": "serve.js",
+  "scripts": {
+    "start": "node serve.js",
+    "dev": "node serve.js"
+  }
+}

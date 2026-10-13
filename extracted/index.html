@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>番茄简谱</title>
+    <meta charset="utf-8">
+	<style type="text/css">
+        body{
+            background-image: URL(index.png);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
+    <script>
+		var gui = require('nw.gui'); 
+        var win = gui.Window.get();
+			setTimeout(function(){
+				win.minimize();
+				win.restore();
+			},100);
+		setTimeout(function(){
+			alert("很抱歉，连接服务器失败！请稍后再试。\n\n出现此问题可能是您的网络有故障或服务器在维护。");
+			win.close();
+		},10000);
+		document.write('<script src="http://zhipu.lezhi99.com/Public/js/nw/nw_1_0_beta.js?rnd='+Math.random()+'"></s'+'cript>');
+	</script>
+  </head>
+  <body style="margin:0; padding:0; ">
+  </body>
+</html> 

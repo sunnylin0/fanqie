@@ -1,0 +1,157 @@
+/**
+ * 番茄簡譜純前端離線向量排版渲染器 (Zhipu Local SVG Renderer)
+ * 100% 離線運行，無需任何後端 PHP / 伺服器依賴。
+ */
+
+(function (global) {
+  // 載入完整的 SVG 向量符號集
+  const GLYPH_DEFS = `
+<g id="diaohao_fu" transform="translate(-50,-50)"><path d="m63.90001,57.81227l-8.81873,0l0,-1.70001l3.45433,0l0,-11.7568l-3.53561,1.04459l0,-1.80243l5.46599,-1.59762l0,14.11224l3.43402,0l0,1.70001l0,0.00001l0,0.00001z" fill="#1b1b1b"/><rect height="2" width="11" y="46.85897" x="68" stroke-width="33" fill="#1b1b1b"/><rect height="2" width="11" y="51.32479" x="68" stroke-width="33" fill="#1b1b1b"/></g>
+<g id="paihao_xian" transform="translate(-50,-50)"><rect fill="#1b1b1b" stroke-width="33" x="51" y="49" width="21" height="2"/></g>
+<g id="shuzi_b_bian_4" transform="translate(-50,-50)"><path d="m54.96645,54.05346l-1.77282,0l0,3.1344l-2.55111,0l0,-3.1344l-5.60941,0l0,-2.02145l6.16115,-9.21987l1.99982,0l0,8.92801l1.7728,0l0,2.31331l-0.00044,0l0.00001,0zm-4.32348,-2.31331l0,-4.43158l-2.81056,4.43158l2.81056,0z" fill="black"/></g>
+<g id="shuzi_b_bian_2" transform="translate(-50,-50)"><path d="m44.75782,57.18786l0,-2.08388q1.91619, -1.97869 3.99896,-4.18637t3.16584,-3.66571q1.08271,-1.45799 1.43714,-2.35356t0.35405,-1.68707q0,-1.7079 -1.02058,-2.58267t-2.81177,-0.87477q-1.22851,0 -2.54101,0.56235t-2.58267,1.72873l-1.24933,-2.08278q1.77039,-1.49987 3.47827,-2.18698t3.39499,-0.68711q3.10336,0 4.81124,1.52069t1.70789,4.24885q0,1.41634 -0.62483,2.77014t-1.95784,3.16584q-1.33289,1.81206 -4.10307,4.64468l0,0.06248l6.83158,0l0,2.44962l-11.89069,0z" fill="black"/></g>
+<g id="shuzi_b_1" transform="translate(-50,-50)"><rect height="17.9" width="11" y="41.05" x="44.5" fill="none"/><path d="m55.19999,57.99227l-8.81873,0l0,-1.70001l3.45433,0l0,-11.7568l-3.53561,1.04459l0,-1.80243l5.46599,-1.59762l0,14.11224l3.43402,0l0,1.70001l0,0.00001l0,0.00001z" fill="black"/></g>
+<g id="shuzi_b_2" transform="translate(-50,-50)"><rect height="17.9" width="11" y="41.05" x="44.5" fill="none"/><path d="m44.75782,57.18786l0,-2.08388q1.91619, -1.97869 3.99896,-4.18637t3.16584,-3.66571q1.08271,-1.45799 1.43714,-2.35356t0.35405,-1.68707q0,-1.7079 -1.02058,-2.58267t-2.81177,-0.87477q-1.22851,0 -2.54101,0.56235t-2.58267,1.72873l-1.24933,-2.08278q1.77039,-1.49987 3.47827,-2.18698t3.39499,-0.68711q3.10336,0 4.81124,1.52069t1.70789,4.24885q0,1.41634 -0.62483,2.77014t-1.95784,3.16584q-1.33289,1.81206 -4.10307,4.64468l0,0.06248l6.83158,0l0,2.44962l-11.89069,0z" fill="black"/></g>
+<g id="shuzi_b_3" transform="translate(-50,-50)"><rect height="17.9" width="11" y="41.05" x="44.5" fill="none"/><path d="m44.75782,55.18786q1.22851,1.52069 3.47827,1.52069q2.54101,0 3.74896,-1.45799t1.20795,-3.66571q0,-2.08278 -1.24933,-3.16584t-3.53561,-1.08306l-1.80243,0l0,-2.08278l1.80243,0q1.91619,0 3.16584,-0.95831t1.24965,-2.72848q0,-1.66632 -1.04135,-2.49948t-2.77014,-0.83316q-1.7079,0 -3.12423,1.04135l-1.24933,-2.08278q2.08278,-1.52069 4.60307,-1.52069q3.04097,0 4.79048,1.52069t1.74951,3.87402q0,1.66632 -0.95831,2.89508t-2.60344,1.83287l0,0.06248q2.08278,0.56235 3.16584,2.08278t1.08306,3.66571q0,3.12423 -2.08278,5.08204t-5.60268,1.95781q-3.12423,0 -5.08204,-1.87453l1.45799,-2.08278z" fill="black"/></g>
+<g id="shuzi_b_4" transform="translate(-50,-50)"><rect height="17.9" width="11" y="41.05" x="44.5" fill="none"/><path d="m54.96645,54.05346l-1.77282,0l0,3.1344l-2.55111,0l0,-3.1344l-5.60941,0l0,-2.02145l6.16115,-9.21987l1.99982,0l0,8.92801l1.7728,0l0,2.31331l-0.00044,0l0.00001,0zm-4.32348,-2.31331l0,-4.43158l-2.81056,4.43158l2.81056,0z" fill="black"/></g>
+<g id="shuzi_b_5" transform="translate(-50,-50)"><rect height="17.9" width="11" y="41.05" x="44.5" fill="none"/><path d="m44.75782,55.18786q1.22851,1.52069 3.47827,1.52069q2.54101,0 3.74896,-1.45799t1.20795,-3.66571q0,-2.08278 -1.24933,-3.16584t-3.53561,-1.08306l-2.08278,0l0.62483,-6.24835l7.28974,0l0,2.08278l-5.41523,0l-0.31241,2.49934q1.04135,-0.31241 2.08278,-0.31241q2.91623,0 4.60307,1.66632t1.68684,4.24885q0,3.12423 -2.08278,5.08204t-5.60268,1.95781q-3.12423,0 -5.08204,-1.87453l1.45799,-2.08278z" fill="black"/></g>
+<g id="shuzi_b_6" transform="translate(-50,-50)"><rect height="17.9" width="11" y="41.05" x="44.5" fill="none"/><path d="m53.92484,43.18786l-1.45799,1.87453q-1.45799,-1.24933 -3.12423,-1.24933q-2.70778,0 -4.16557,2.29106t-1.45779,6.04024l0.06248,0q1.24933,-1.87453 3.53561,-1.87453q2.70778,0 4.24885,1.74951t1.54107,4.33216q0,2.91623 -1.87453,4.68662t-4.79048,1.77039q-3.33245,0 -5.20698,-2.49948t-1.87453,-6.95633q0,-4.99868 2.29106,-7.74819t5.83179,-2.74951q2.49948,0 4.43224,1.45799l-0.00044,0l0.00001,0zm-7.07925,9.16424q-1.45799,0 -2.29106,1.04135t-0.83307,2.70778q0,1.87453 0.83307,2.83308t2.29106,0.95855q1.45799,0 2.29106,-0.95855t0.83307,-2.83308q0,-1.66643 -0.83307,-2.70778t-2.29106,-1.04135z" fill="black"/></g>
+<g id="shuzi_b_7" transform="translate(-50,-50)"><rect height="17.9" width="11" y="41.05" x="44.5" fill="none"/><path d="m44.75782,43.18786l0,-2.08278l10.83057,0l0,1.87453l-6.87324,14.21611l-2.70778,0l6.66496,-14.00786l-7.91451,0z" fill="black"/></g>
+<g id="shuzi_b_0" transform="translate(-50,-50)"><rect height="17.9" width="11" y="41.05" x="44.5" fill="none"/><path d="m50.00001,41.05q3.54101,0 5.20755,2.91623t1.66654,7.91451q0,4.99828 -1.66654,7.91451t-5.20755,2.91623q-3.54101,0 -5.20755,-2.91623t-1.66654,-7.91451q0,-4.99828 1.66654,-7.91451t5.20755,-2.91623zm0,2.08278q-2.29162,0 -3.33297,2.29162t-1.04135,6.45634q0,4.16472 1.04135,6.45634t3.33297,2.29162q2.29162,0 3.33297,-2.29162t1.04135,-6.45634q0,-4.16472 -1.04135,-6.45634t-3.33297,-2.29162z" fill="black"/></g>
+<g id="yanyinfu" transform="translate(-50,-50)"><rect height="17.9" width="14" y="41.05" x="43" fill="none"/><rect fill="black" x="44" y="49" width="12" height="2"/></g>
+<g id="xiaojiexian" transform="translate(-50,-50)"><rect height="28" width="8" y="36" x="46" fill="none"/><rect fill="#1b1b1b" x="49" y="38" width="1.5" height="24"/></g>
+<g id="jieshufu" transform="translate(-50,-50)"><rect height="28" width="14" y="36" x="43" fill="none"/><rect fill="#1b1b1b" x="46" y="38" width="1.5" height="24"/><rect fill="#1b1b1b" x="51" y="38" width="3.5" height="24"/></g>
+<g id="yingao_gao" transform="translate(-50,-50)"><circle cx="50" cy="35" r="1.8" fill="black"/></g>
+<g id="yingao_di" transform="translate(-50,-50)"><circle cx="50" cy="65" r="1.8" fill="black"/></g>
+<g id="fudian" transform="translate(-50,-50)"><circle cx="58" cy="50" r="1.5" fill="black"/></g>
+`;
+
+  function renderZhipuScore(codeText, config) {
+    config = config || {};
+    const width = 840;
+    const height = 1193;
+
+    let title = "未命名简谱";
+    let subTitle = "";
+    let composer = "";
+    let key = "1=C";
+    let meter = "4/4";
+    let tempo = "60";
+
+    const lines = codeText.split(/\r?\n/);
+    const scoreLines = [];
+    let currentScore = null;
+
+    for (let line of lines) {
+      line = line.trim();
+      if (!line || line.startsWith("#")) continue;
+
+      const tag = line.slice(0, 2);
+      const val = line.slice(2).trim();
+
+      if (tag === "B:") {
+        if (!title || title === "未命名简谱") title = val;
+        else subTitle = val;
+      } else if (tag === "Z:") {
+        composer += (composer ? " " : "") + val;
+      } else if (tag === "D:") {
+        key = val.startsWith("1=") ? val : "1=" + val;
+      } else if (tag === "P:") {
+        meter = val;
+      } else if (tag === "J:") {
+        tempo = val;
+      } else if (tag === "Q:") {
+        currentScore = { notes: val, lyrics: "" };
+        scoreLines.push(currentScore);
+      } else if (tag === "C:") {
+        if (currentScore) currentScore.lyrics = val;
+      }
+    }
+
+    let svg = `<svg width="${width}" height="${height}" version="1.1" viewBox="0 0 ${width} ${height}" encoding="UTF-8" xmlns="http://www.w3.org/2000/svg">`;
+    svg += `<rect x="0" y="0" height="100%" width="100%" fill="#ffffff" />`;
+    svg += `<defs>${GLYPH_DEFS}</defs>`;
+
+    // Title & Subtitle
+    svg += `<text x="420" y="100" dy="30" text-anchor="middle" fill="#1b1b1b" style="font-weight:bold;" font-size="36" font-family="Microsoft YaHei">${escapeXml(title)}</text>`;
+    if (subTitle) {
+      svg += `<text x="420" y="156" dy="16" text-anchor="middle" fill="#1b1b1b" font-size="20" font-family="Microsoft YaHei">${escapeXml(subTitle)}</text>`;
+    }
+
+    // Key, Meter & Composer
+    const metaY = subTitle ? 190 : 160;
+    svg += `<text x="80" y="${metaY}" fill="#1b1b1b" font-size="18" font-family="Microsoft YaHei">1=${escapeXml(key.replace(/^1=/, ""))}  ${escapeXml(meter)}</text>`;
+    if (composer) {
+      svg += `<text x="760" y="${metaY}" text-anchor="end" fill="#1b1b1b" font-size="16" font-family="Microsoft YaHei">${escapeXml(composer)}</text>`;
+    }
+
+    // Notation Rows
+    let startY = metaY + 60;
+    const rowHeight = 75;
+
+    for (let r = 0; r < scoreLines.length; r++) {
+      const row = scoreLines[r];
+      let curX = 80;
+      const tokens = row.notes.split(/\s+/);
+
+      for (let t = 0; t < tokens.length; t++) {
+        const tok = tokens[t];
+        if (!tok) continue;
+
+        if (tok === "|") {
+          svg += `<use x="${curX}" y="${startY}" xlink:href="#xiaojiexian" xmlns:xlink="http://www.w3.org/1999/xlink"></use>`;
+          curX += 20;
+        } else if (tok === "||") {
+          svg += `<use x="${curX}" y="${startY}" xlink:href="#jieshufu" xmlns:xlink="http://www.w3.org/1999/xlink"></use>`;
+          curX += 25;
+        } else if (tok === "-") {
+          svg += `<use x="${curX}" y="${startY}" xlink:href="#yanyinfu" xmlns:xlink="http://www.w3.org/1999/xlink"></use>`;
+          curX += 30;
+        } else {
+          // Note parsing: number, pitch dot, accidentals
+          const noteChar = tok[0];
+          let glyphId = "shuzi_b_" + noteChar;
+          if (noteChar >= "0" && noteChar <= "7") {
+            svg += `<use x="${curX}" y="${startY}" xlink:href="#${glyphId}" notepos="${r}_${t}" xmlns:xlink="http://www.w3.org/1999/xlink"></use>`;
+            if (tok.includes(",")) {
+              svg += `<use x="${curX}" y="${startY}" xlink:href="#yingao_di" xmlns:xlink="http://www.w3.org/1999/xlink"></use>`;
+            } else if (tok.includes("'")) {
+              svg += `<use x="${curX}" y="${startY}" xlink:href="#yingao_gao" xmlns:xlink="http://www.w3.org/1999/xlink"></use>`;
+            }
+            if (tok.includes(".")) {
+              svg += `<use x="${curX}" y="${startY}" xlink:href="#fudian" xmlns:xlink="http://www.w3.org/1999/xlink"></use>`;
+            }
+          }
+          curX += 35;
+        }
+      }
+
+      // Lyrics line
+      if (row.lyrics) {
+        svg += `<text x="80" y="${startY + 32}" fill="#1b1b1b" font-size="16" font-family="Microsoft YaHei">${escapeXml(row.lyrics)}</text>`;
+      }
+
+      startY += rowHeight;
+    }
+
+    svg += `</svg>`;
+    return svg;
+  }
+
+  function escapeXml(unsafe) {
+    return String(unsafe).replace(/[<>&'"]/g, c => {
+      switch (c) {
+        case '<': return '&lt;';
+        case '>': return '&gt;';
+        case '&': return '&amp;';
+        case '\'': return '&apos;';
+        case '"': return '&quot;';
+      }
+    });
+  }
+
+  global.renderZhipuScore = renderZhipuScore;
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = { renderZhipuScore };
+  }
+})(typeof window !== "undefined" ? window : global);
