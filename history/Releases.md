@@ -66,6 +66,13 @@
   - `web/index.html`: 「打開」直接觸發 `#localFileInput` 讀取本地 `.jps`；「另存為」直接呼叫本地儲存；軟體與語法幫助改用 `window.open` 在新分頁瀏覽。
   - `web/Zhipu-jsCode.js`: 示範曲庫 `openExampleFile()` 全面接通本地 5 首曲譜；「導出SVG」實作純前端 DOM 抽取與 Blob 向量下載，完全移除遠端伺服器請求。
 
+---
+## [2026-10-13 20:40] Complete Symbol Assets Mirror (Offline Custom Symbols)
+### 變更摘要
+- **符號預覽圖與定義檔鏡像**: 下載並本地化所有 52 個自訂符號圖片 (`/Public/symbol/{1..52}.png`) 及對應之 SVG 片段定義檔 (`/Public/symbol/{1..52}.txt`)。
+- **伺服器 MIME 配置**: 在 `serve.js` 補充 `.txt` 為 `text/plain; charset=utf-8`。
+- **純離線可用**: 「符號大全」對話框圖片均可正常顯示，且點擊後可將符號正確插入曲譜中。
+
 
 
 

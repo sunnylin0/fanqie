@@ -71,8 +71,14 @@
 - **驗證成果 (Phase 5 - Phase 6)**:
   - 執行自動化測試確認 12 個對話框 HTML（`Zhipu-player.html`, `Zhipu-newFile.html`, `Zhipu-exampleList.html`, `Zhipu-about.html` 等）於本地伺服器全數回傳 HTTP 200。
   - 驗證「打開」點選直接叫起本機檔案選取器；「另存為」直接產出本機 `.jps` 下載。
-  - 驗證「從示例譜庫中打開」能無縫載入本地 5 首 `.jps` 曲譜。
+  - 驗證「從示例譜庫中打開」能無縫載入本地 5 首曲譜。
   - 驗證「導出SVG」純前端生成多頁向量圖下載。
+
+---
+## [2026-10-13 20:40] 符號大全圖片與向量檔修復驗證
+- **驗證記錄**:
+  - 執行本地伺服器測試，對 `/Public/symbol/46.png`、`/Public/symbol/47.png`、`/Public/symbol/1.png`、`/Public/symbol/1.txt`、`/Public/symbol/46.txt` 進行發包測試，全數回傳 HTTP 200。
+  - 驗證在「符號大全」對話框中點選任何符號均能立即載入對應 SVG 片段並可插入樂譜。
 
 
 

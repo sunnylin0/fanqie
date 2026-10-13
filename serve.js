@@ -16,6 +16,7 @@ const MIME = {
   '.gif': 'image/gif',
   '.svg': 'image/svg+xml',
   '.json': 'application/json',
+  '.txt': 'text/plain; charset=utf-8',
   '.jps': 'text/plain; charset=utf-8'
 };
 

@@ -71,5 +71,13 @@
   - `web/Zhipu-jsCode.js`
   - `serve.js`
 
+---
+## [2026-10-13 20:40] 符號大全資產鏡像與 MIME 配置 (Completed)
+- **實作步驟**:
+  1. 分析 `Zhipu-addCustomSymbol.html` 與 `Zhipu-jsCode.js` 引用結構，得知符號展示需 `.png`，點選插入需 `.txt` 向量定義。
+  2. 編寫自動化爬蟲 `download_symbols.js`，從官方網站鏡像抓取全部 52 個符號資產（52 個 PNG + 52 個 TXT）至 `web/Public/symbol/`。
+  3. 於 `serve.js` 之 `MIME` 映射表補上 `.txt: 'text/plain; charset=utf-8'`。
+  4. 執行端對端請求驗證，確認所有符號圖片與向量定義檔均能以 HTTP 200 本機載入。
+
 
 
